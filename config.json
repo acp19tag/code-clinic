@@ -1,0 +1,6 @@
+{
+    "input_data":{
+        "answers": "data/df_answers.csv",
+        "testset": "data/df_testset.csv"
+    }
+}
