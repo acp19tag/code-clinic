@@ -9,3 +9,6 @@
 
 # wandb logs
 *wandb*
+
+# model checkpoints
+*.pt
