@@ -21,6 +21,15 @@ from tqdm import tqdm
 import os
 
 ##########################
+# PARAMETERS
+##########################
+
+n_users = 4_200_000
+n_jobs = 200_000
+n_apps = 250_000
+n_skills_per_item = 10
+
+##########################
 # CREATE DIRECTORIES
 ##########################
 
@@ -37,8 +46,8 @@ if not os.path.exists('data/apps/'):
 # randomly select 250_000 users and jobs with replacement
 app_df = pd.DataFrame(
     {
-        'user_id': np.random.choice(np.arange(1, 4_200_000), size=250_000, replace=True),
-        'job_id': np.random.choice(np.arange(1, 200_000), size=250_000, replace=True),
+        'user_id': np.random.choice(np.arange(1, n_users), size=n_apps, replace=True),
+        'job_id': np.random.choice(np.arange(1, n_jobs), size=n_apps, replace=True),
     }
 )
 
@@ -70,6 +79,7 @@ skill_dict = dict(enumerate(skills))
 # def generate_extracted_skill_span(skills):
 #     """
 #     Generates a random skill span from the list of skills.
+#     THIS IS TOO SLOW
 #     """
 #     # number of skills should be between 1 and 5 (arbitrary - just has to be inconsistent)
 #     num_skills = np.random.randint(1, 6)
@@ -79,15 +89,15 @@ skill_dict = dict(enumerate(skills))
     
 #     return "{'Occupation': [], 'Qualification': [], 'Skill': " + str(list(skill_list)) + ", 'Experience': [], 'Domain': []}"
 
-def generate_skill_index_array(n_elements_total, skill_list_length):
+def generate_skill_index_array(n_elements_total, skill_list_length, n_apps = n_apps):
     
     # start by assuming each array has 3 skills
     
-    long_index_list = np.random.choice(np.arange(0, skill_list_length), size=n_elements_total*3, replace=True)
+    long_index_list = np.random.choice(np.arange(0, skill_list_length), size=n_elements_total*n_skills_per_item, replace=True)
     
     # reshape to 3 columns
     
-    return long_index_list.reshape(-1, 3)
+    return long_index_list.reshape(-1, n_skills_per_item)
     
 def lookup_array_to_skill_list(lookup_array, skill_dict):
     return [skill_dict[i] for i in lookup_array]
@@ -95,16 +105,13 @@ def lookup_array_to_skill_list(lookup_array, skill_dict):
 def convert_skill_list_to_output_format(skill_list):
     return "{'Occupation': [], 'Qualification': [], 'Skill': " + str(skill_list) + ", 'Experience': [], 'Domain': []}"    
 
-job_skills_index_array = generate_skill_index_array(200_000, len(skills))
-user_skills_index_array = generate_skill_index_array(4_200_000, len(skills))
-
-# print(f"len np arange: {len(np.arange(1, 200_000))}") # DEBUG
-# print(f"len converted skills: {len([convert_skill_list_to_output_format(lookup_array_to_skill_list(job_skills_index_array[i], skill_dict)) for i in range(200_000)])}") # DEBUG
+job_skills_index_array = generate_skill_index_array(n_jobs, len(skills))
+user_skills_index_array = generate_skill_index_array(n_users, len(skills))
 
 job_spans_df = pd.DataFrame(
     {
-        'job_id': np.arange(1, 200_000),
-        'extracted_spans': [convert_skill_list_to_output_format(lookup_array_to_skill_list(job_skills_index_array[i], skill_dict)) for i in tqdm(range(200_000-1), desc = 'Creating job spans')]
+        'job_id': np.arange(1, n_jobs),
+        'extracted_spans': [convert_skill_list_to_output_format(lookup_array_to_skill_list(job_skills_index_array[i], skill_dict)) for i in tqdm(range(n_jobs-1), desc = 'Creating job spans')]
     }
 )
 
@@ -112,8 +119,8 @@ job_spans_df.to_csv('data/job_extracted_spans.csv', index=False)
 
 user_spans_df = pd.DataFrame(
     {
-        'user_id': np.arange(1, 4_200_000),
-        'extracted_spans': [convert_skill_list_to_output_format(lookup_array_to_skill_list(user_skills_index_array[i], skill_dict)) for i in tqdm(range(4_200_000-1), desc = 'Creating user spans')]
+        'user_id': np.arange(1, n_users),
+        'extracted_spans': [convert_skill_list_to_output_format(lookup_array_to_skill_list(user_skills_index_array[i], skill_dict)) for i in tqdm(range(n_users-1), desc = 'Creating user spans')]
     }
 )
 
