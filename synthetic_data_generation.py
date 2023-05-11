@@ -18,6 +18,16 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
+import os
+
+##########################
+# CREATE DIRECTORIES
+##########################
+
+if not os.path.exists('data/apps/'):
+    os.mkdir('data/')
+    os.mkdir('data/apps/')
+    
 
 ##########################
 # GENERATING APPS DATA
