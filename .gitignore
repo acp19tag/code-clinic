@@ -1,2 +1,11 @@
+# all generatable data
+*data/*
+
 # virtual environment
 *env/*
+
+# cpython files
+*.pyc
+
+# wandb logs
+*wandb*

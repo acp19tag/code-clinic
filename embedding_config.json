@@ -1,0 +1,23 @@
+{
+    "bert-base-nli-mean-tokens": {
+        "embed_size": 768
+        },
+    "all-mpnet-base-v2": {
+        "embed_size": 768,
+        "max_seq_length": 384,
+        "size_in_mb": 420,
+        "encoding_speed": 2800
+        },
+    "all-MiniLM-L6-v2": {
+        "embed_size": 384,
+        "max_seq_length": 256,
+        "size_in_mb": 80,
+        "encoding_speed": 14200
+        },
+    "sentence-t5-xxl": {
+        "embed_size": 768,
+        "max_seq_length": 256,
+        "size_in_mb": 9230,
+        "encoding_speed": 50
+        }
+}
