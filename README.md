@@ -13,3 +13,5 @@ Code to be shared with the University of Sheffield Code Clinic.
 3. `python main_nosweep.py --embedding_method all-mpnet-base-v2` 
     - to train the model
     - runs ~ 30 seconds per epoch (10 epochs ~ 5 minutes)
+
+![Image of Diagram](pipeline_diagram.png)
